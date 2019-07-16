@@ -6,7 +6,7 @@ use Slim\Http\Response;
 // Routes
 
 // $app->get('[/]', '\App\Controllers\TestController:test');
-$app->redirect('[/]', $_ENV['APP_URL'].'/login');
+$app->redirect('[/]', $_ENV['APP_URL'].'/tenant');
 $app->get('/login', '\App\Controllers\AuthControllers\LoginController:login')->setName('login');
 $app->get('/logout', '\App\Controllers\AuthControllers\LoginController:logout')->setName('logout');
 
