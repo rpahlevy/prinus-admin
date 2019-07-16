@@ -1,3 +1,8 @@
+# PRINUS ADMIN
+
+1. Duplicate .env.template to .env
+2. Masukkan detail database & APP_URL
+
 ## TODO
 
 1. Tenant : List [done]
