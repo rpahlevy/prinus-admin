@@ -5,6 +5,7 @@ namespace App\Controllers;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use App\Models\Users;
+use DateTimeZone;
 
 class UsersController extends Controller
 {
@@ -30,18 +31,22 @@ class UsersController extends Controller
     public function add(Request $request, Response $response, $args)
     {
         $user = [
-            'sn' => '',
-            'location_id' => '',
+            'username' => '',
+            'is_active' => 1,
             'tenant_id' => intval($request->getParam('t', 0)),
+            'email' => '',
+            'tz' => 'Asia/Jakarta'
         ];
 
         $tenants = $this->db->query("SELECT * FROM tenant ORDER BY nama")->fetchAll();
+        $timezones = DateTimeZone::listIdentifiers(DateTimeZone::ALL);
         $referer = $this->referer($request, $this->route('users'));
 
         return $this->view($response, 'user/edit.html', [
             'mode' => 'Add',
             'user' => $user,
             'tenants' => $tenants,
+            'timezones' => $timezones,
             'referer' => $referer,
         ]);
     }
@@ -74,12 +79,14 @@ class UsersController extends Controller
         }
 
         $tenants = $this->db->query("SELECT * FROM tenant ORDER BY nama")->fetchAll();
+        $timezones = DateTimeZone::listIdentifiers(DateTimeZone::ALL);
         $referer = $this->referer($request, $this->route('users'));
 
         return $this->view($response, 'user/edit.html', [
             'mode' => 'Edit',
             'user' => $user,
             'tenants' => $tenants,
+            'timezones' => $timezones,
             'referer' => $referer
         ]);
     }
