@@ -18,7 +18,7 @@ class UsersController extends Controller
                 LEFT JOIN tenant ON (users.tenant_id = tenant.id)
             ORDER BY
                 users.is_active DESC,
-                tenant.nama,
+                nama_tenant,
                 users.username
             ")->fetchAll();
 
@@ -36,7 +36,7 @@ class UsersController extends Controller
         ];
 
         $tenants = $this->db->query("SELECT * FROM tenant ORDER BY nama")->fetchAll();
-        $referer = $this->referer($request, $this->route('user'));
+        $referer = $this->referer($request, $this->route('users'));
 
         return $this->view($response, 'user/edit.twig', [
             'mode' => 'Add',
@@ -56,7 +56,7 @@ class UsersController extends Controller
         $stmt->bindValue(':tenant_id', $user['tenant_id'] ? $user['tenant_id'] : null);
         $stmt->execute();
         
-        $referer = $request->getParam('_referer', $this->route('user'));
+        $referer = $request->getParam('_referer', $this->route('users'));
         
         return $this->redirect($response, $referer, [
             'messages' => "Users {$user[sn]} telah ditambahkan"
@@ -66,7 +66,7 @@ class UsersController extends Controller
     public function edit(Request $request, Response $response, $args)
     {
         $id = isset($args['id']) ? intval($args['id']) : 0;
-        $stmt = $this->db->prepare("SELECT * FROM user WHERE id=:id");
+        $stmt = $this->db->prepare("SELECT * FROM users WHERE id=:id");
         $stmt->execute([':id' => $id]);
         $user = $stmt->fetch();
         if (!$user) {
@@ -74,7 +74,7 @@ class UsersController extends Controller
         }
 
         $tenants = $this->db->query("SELECT * FROM tenant ORDER BY nama")->fetchAll();
-        $referer = $this->referer($request, $this->route('user'));
+        $referer = $this->referer($request, $this->route('users'));
 
         return $this->view($response, 'user/edit.twig', [
             'mode' => 'Edit',
@@ -100,14 +100,14 @@ class UsersController extends Controller
 
         $now = date('Y-m-d H:i:s');
 
-        $stmt = $this->db->prepare("UPDATE users set sn=:sn, location_id=:location_id, tenant_id=:tenant_id, modified_at='$now' WHERE id=:id");
+        $stmt = $this->db->prepare("UPDATE users set sn=:sn, location_id=:location_id, tenant_id=:tenant_id, modified='$now' WHERE id=:id");
         $stmt->bindValue(':sn', $user['sn']);
         $stmt->bindValue(':location_id', $user['location_id'] ? $user['location_id'] : null);
         $stmt->bindValue(':tenant_id', $user['tenant_id'] ? $user['tenant_id'] : null);
         $stmt->bindValue(':id', $user['id']);
         $stmt->execute();
 
-        $referer = $request->getParam('_referer', $this->route('user'));
+        $referer = $request->getParam('_referer', $this->route('users'));
         
         return $this->redirect($response, $referer, [
             'messages' => "Perubahan Users {$user[sn]} telah disimpan"
@@ -127,14 +127,14 @@ class UsersController extends Controller
         $stmt = $this->db->prepare("UPDATE users SET tenant_id=null WHERE id=:id");
         $stmt->execute([':id' => $id]);
 
-        $referer = $this->referer($request, $this->route('user'));
+        $referer = $this->referer($request, $this->route('users'));
         
         return $this->redirect($response, $referer, [
-            'messages' => "Users {$user[sn]} telah dipisahkan dari Tenant"
+            'messages' => "User {$user[sn]} telah dipisahkan dari Tenant"
         ]);
     }
 
-    public function handleDelete(Request $request, Response $response, $args)
+    public function handleEnable(Request $request, Response $response, $args)
     {
         $id = isset($args['id']) ? intval($args['id']) : 0;
         $stmt = $this->db->prepare("SELECT * FROM users WHERE id=:id");
@@ -144,13 +144,19 @@ class UsersController extends Controller
             throw new \Slim\Exception\NotFoundException($request, $response);
         }
 
-        $stmt = $this->db->prepare("DELETE FROM users WHERE id=:id");
-        $stmt->execute([':id' => $id]);
+        $user['is_active'] = $request->getParam('is_active', $user['is_active']);
 
-        $referer = $this->referer($request, $this->route('user'));
+        $now = date('Y-m-d H:i:s');
+
+        $stmt = $this->db->prepare("UPDATE users set is_active=:is_active, modified='$now' WHERE id=:id");
+        $stmt->bindValue(':is_active', $user['is_active']);
+        $stmt->bindValue(':id', $user['id']);
+        $stmt->execute();
+
+        $referer = $this->referer($request, $this->route('users'));
         
         return $this->redirect($response, $referer, [
-            'messages' => "Users {$user[sn]} telah dihapus"
+            'messages' => "Users {$user[username]} ". ($user['is_active'] == 0 ? 'DISABLED' : 'ENABLED')
         ]);
     }
 
@@ -169,7 +175,7 @@ class UsersController extends Controller
     //     $users = $stmt_users->fetchAll();
     //     $user['jml_user'] = count($users);
         
-    //     $stmt_user = $this->db->prepare("SELECT * from user WHERE user_id=:id");
+    //     $stmt_user = $this->db->prepare("SELECT * FROM users WHERE user_id=:id");
     //     $stmt_user->execute([':id' => $id]);
     //     $users = $stmt_user->fetchAll();
     //     $user['jml_user'] = count($users);

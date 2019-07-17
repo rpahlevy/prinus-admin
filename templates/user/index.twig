@@ -17,7 +17,11 @@
                     <div class="card-body d-flex flex-column flex-lg-row justify-content-lg-between align-items-lg-start">
                         <div class="mb-3 mb-lg-0">
                             <div class="text-xs font-weight-bold text-uppercase mb-1">
-                                <a href="{{ path_for('detailTenant', {'id': user.tenant_id}) }}" class="{{ user.nama_tenant != 'Admin' ?: 'text-danger' }}">{{ user.nama_tenant }}</a>
+                                {% if user.tenant_id > 0 %}
+                                <a href="{{ path_for('detailTenant', {'id': user.tenant_id}) }}">{{ user.nama_tenant }}</a>
+                                {% else %}
+                                <span class="text-danger">{{ user.nama_tenant }}</span>
+                                {% endif %}
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
                                 {{ user.username }}
@@ -30,19 +34,19 @@
                             <div class="h6 mb-0 font-weight-slim text-gray-500">{{ user.email ? user.email : '-' }}</div>
                         </div>
                         <div class="text-right">
-                            <form class="d-inline" action="{{ path_for('activateUser', {id: user.id}) }}" method="post" onsubmit="return confirmDelete('{{ user.username }}')">
+                            <form class="d-inline" action="{{ path_for('enableUser', {id: user.id}) }}" method="post" onsubmit="return confirmEnabled('{{ user.username }}', {{ user.is_active != 0 }})">
                                 <input type="hidden" name="is_active" value="{{ (user.is_active + 1) % 2 }}">
 
                                 {% if user.is_active == 0 %}
                                     <button class="btn btn-success btn-sm btn-icon-split" role="button">
-                                        <span class="text">Aktifkan</span>
+                                        <span class="text">Enable</span>
                                         <span class="icon text-white-50">
                                             <i class="fa fa-check text-white-50"></i>
                                         </span>
                                     </button>
                                 {% else %}
                                     <button class="btn btn-danger btn-sm btn-icon-split" role="button">
-                                        <span class="text">Deaktif</span>
+                                        <span class="text">Disable</span>
                                         <span class="icon text-white-50">
                                             <i class="fa fa-times text-white-50"></i>
                                         </span>
@@ -68,8 +72,8 @@
             $('#btn-create').focus();
         })
 
-        confirmDelete = function (sn) {
-            return confirm("Hapus user " + sn + " permanen?");
+        confirmEnabled = function (sn, enabled) {
+            return confirm((enabled ? "Disable" : "Enable") +" user " + sn + "?");
         }
     </script>
 {% endblock %}
