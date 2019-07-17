@@ -22,7 +22,7 @@ class UsersController extends Controller
                 users.username
             ")->fetchAll();
 
-        return $this->view($response, 'user/index.twig', [
+        return $this->view($response, 'user/index.html', [
             'users' => $users
         ]);
     }
@@ -38,7 +38,7 @@ class UsersController extends Controller
         $tenants = $this->db->query("SELECT * FROM tenant ORDER BY nama")->fetchAll();
         $referer = $this->referer($request, $this->route('users'));
 
-        return $this->view($response, 'user/edit.twig', [
+        return $this->view($response, 'user/edit.html', [
             'mode' => 'Add',
             'user' => $user,
             'tenants' => $tenants,
@@ -76,7 +76,7 @@ class UsersController extends Controller
         $tenants = $this->db->query("SELECT * FROM tenant ORDER BY nama")->fetchAll();
         $referer = $this->referer($request, $this->route('users'));
 
-        return $this->view($response, 'user/edit.twig', [
+        return $this->view($response, 'user/edit.html', [
             'mode' => 'Edit',
             'user' => $user,
             'tenants' => $tenants,
@@ -180,7 +180,7 @@ class UsersController extends Controller
     //     $users = $stmt_user->fetchAll();
     //     $user['jml_user'] = count($users);
 
-    //     return $this->view($response, 'user/detail.twig', [
+    //     return $this->view($response, 'user/detail.html', [
     //         'user' => $user,
     //         'users' => $users,
     //         'users' => $users,
