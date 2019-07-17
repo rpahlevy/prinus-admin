@@ -46,7 +46,7 @@ $app->group('/user', function() {
 
         $this->post('/unlink', '\App\Controllers\UsersController:handleUnlink')->setName('unlinkUser');
 
-        $this->post('/delete', '\App\Controllers\UsersController:handleActivate')->setName('activateUser');
+        $this->post('/enable', '\App\Controllers\UsersController:handleEnable')->setName('enableUser');
     });
 });
 
