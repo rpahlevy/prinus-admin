@@ -1,4 +1,4 @@
-{% extends 'layouts/master.twig' %}
+{% extends 'layouts/master.html' %}
 
 {% set title = mode ~ " Logger" %}
 
@@ -41,7 +41,7 @@
                             <label class="col-sm-2 col-form-label" for="tenant_id">Tenant</label>
                             <div class="col-sm-10">
                                 <select class="form-control" id="tenant_id" name="tenant_id">
-                                    <option value="null">- Tidak ada Tenant -</option>
+                                    <option value="null" selected>- Tidak ada Tenant -</option>
                                     {% for tenant in tenants %}
                                         <option value="{{ tenant.id }}" {% if tenant.id == logger.tenant_id %} selected {% endif %}>{{ tenant.nama }}</option>
                                     {% endfor %}

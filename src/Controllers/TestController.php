@@ -9,6 +9,6 @@ class TestController extends Controller
 {
     public function test($request, $response, $args)
     {
-        return $this->view($response, 'template.twig');
+        return $this->view($response, 'template.html');
     }
 }

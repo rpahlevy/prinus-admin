@@ -25,7 +25,7 @@ $container['view'] = function ($c) {
 // not found handler
 $container['notFoundHandler'] = function($c) {
     return function ($req, $rsp) use ($c) {
-        return $c->view->render($rsp->withStatus(404), 'errors/404.twig');
+        return $c->view->render($rsp->withStatus(404), 'errors/404.html');
     };
 };
 

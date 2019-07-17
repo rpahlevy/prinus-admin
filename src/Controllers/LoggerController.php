@@ -21,7 +21,7 @@ class LoggerController extends Controller
                 logger.sn
             ")->fetchAll();
 
-        return $this->view($response, 'logger/index.twig', [
+        return $this->view($response, 'logger/index.html', [
             'loggers' => $loggers
         ]);
     }
@@ -37,7 +37,7 @@ class LoggerController extends Controller
         $tenants = $this->db->query("SELECT * FROM tenant ORDER BY nama")->fetchAll();
         $referer = $this->referer($request, $this->route('logger'));
 
-        return $this->view($response, 'logger/edit.twig', [
+        return $this->view($response, 'logger/edit.html', [
             'mode' => 'Add',
             'logger' => $logger,
             'tenants' => $tenants,
@@ -75,7 +75,7 @@ class LoggerController extends Controller
         $tenants = $this->db->query("SELECT * FROM tenant ORDER BY nama")->fetchAll();
         $referer = $this->referer($request, $this->route('logger'));
 
-        return $this->view($response, 'logger/edit.twig', [
+        return $this->view($response, 'logger/edit.html', [
             'mode' => 'Edit',
             'logger' => $logger,
             'tenants' => $tenants,
@@ -173,7 +173,7 @@ class LoggerController extends Controller
     //     $loggers = $stmt_logger->fetchAll();
     //     $logger['jml_logger'] = count($loggers);
 
-    //     return $this->view($response, 'logger/detail.twig', [
+    //     return $this->view($response, 'logger/detail.html', [
     //         'logger' => $logger,
     //         'users' => $users,
     //         'loggers' => $loggers,

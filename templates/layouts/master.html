@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    {% include 'layouts/title.twig' %}
+    {% include 'layouts/title.html' %}
 
     <!-- Custom fonts for this template-->
     <link href="{{asset('css/font-awesome.min.css')}}" rel="stylesheet" type="text/css">
@@ -29,7 +29,7 @@
     <!-- Page Wrapper -->
     <div id="wrapper">
 
-        {% include 'layouts/sidebar.twig' %}
+        {% include 'layouts/sidebar.html' %}
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -37,12 +37,12 @@
             <!-- Main Content -->
             <div id="content">
 
-                {% include 'layouts/topbar.twig' %}
+                {% include 'layouts/topbar.html' %}
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid mt-sm-4">
 
-                    {% include 'includes/flash.twig' %}
+                    {% include 'includes/flash.html' %}
 
                     {% block content %}{% endblock %}
 
@@ -52,7 +52,7 @@
             </div>
             <!-- End of Main Content -->
 
-            {% include 'layouts/footer.twig' %}
+            {% include 'layouts/footer.html' %}
 
         </div>
         <!-- End of Content Wrapper -->
@@ -60,7 +60,7 @@
     </div>
     <!-- End of Page Wrapper -->
 
-    {% include 'layouts/scrolltop.twig' %}
+    {% include 'layouts/scrolltop.html' %}
 
     <!-- Bootstrap core JavaScript-->
     <script src="{{asset('js/jquery.min.js')}}"></script>

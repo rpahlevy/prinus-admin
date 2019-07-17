@@ -17,7 +17,7 @@ class TenantController extends Controller
         }
         unset($tenant);
 
-        return $this->view($response, 'tenant/index.twig', [
+        return $this->view($response, 'tenant/index.html', [
             'tenants' => $tenants
         ]);
     }
@@ -31,7 +31,7 @@ class TenantController extends Controller
         
         $referer = $this->referer($request, $this->route('logger'));
 
-        return $this->view($response, 'tenant/edit.twig', [
+        return $this->view($response, 'tenant/edit.html', [
             'mode' => 'Add',
             'tenant' => $tenant,
             'referer' => $referer,
@@ -66,7 +66,7 @@ class TenantController extends Controller
 
         $referer = $this->referer($request, $this->route('tenant'));
 
-        return $this->view($response, 'tenant/edit.twig', [
+        return $this->view($response, 'tenant/edit.html', [
             'mode' => 'Edit',
             'tenant' => $tenant,
             'referer' => $referer
@@ -133,7 +133,7 @@ class TenantController extends Controller
         $loggers = $stmt_logger->fetchAll();
         $tenant['jml_logger'] = count($loggers);
 
-        return $this->view($response, 'tenant/detail.twig', [
+        return $this->view($response, 'tenant/detail.html', [
             'tenant' => $tenant,
             'users' => $users,
             'loggers' => $loggers,
