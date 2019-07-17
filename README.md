@@ -5,13 +5,13 @@
 
 ## TODO
 
-1. Tenant : List [done]
-2. Tenant : Create & Update [done]
-3. Tenant : Details (List all user & logger in tenant) [done]
-4. Tenant : Details Action (Unlink & set enable user, unlink & delete logger) [done]
-5. Users : List [done]
-6. Users : Create, Update, & Delete
-7. Logger : List [done]
-8. Logger : Create, Update, & Delete [done]
-9. Auth : Login & Logout
-10. Auth : Filter Level -> Admin & User Tenant
+1. [x] Tenant : List
+2. [x] Tenant : Create & Update
+3. [x] Tenant : Details (List all user & logger in tenant)
+4. [x] Tenant : Details Action (Unlink & set enable user, unlink & delete logger)
+5. [x] Users : List
+6. [ ] Users : Create, Update, & Disabled (60% - logic create & update)
+7. [x] Logger : List
+8. [x] Logger : Create, Update, & Delete
+9. [ ] Auth : Login & Logout
+10. [ ] Auth : Filter Level -> Admin & User Tenant
