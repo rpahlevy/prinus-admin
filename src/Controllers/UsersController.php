@@ -55,16 +55,42 @@ class UsersController extends Controller
     {
         $user = $request->getParams();
 
-        $stmt = $this->db->prepare("INSERT INTO users (sn, location_id, tenant_id) VALUES (:sn, :location_id, :tenant_id)");
-        $stmt->bindValue(':sn', $user['sn']);
-        $stmt->bindValue(':location_id', $user['location_id'] ? $user['location_id'] : null);
+        $stmt = $this->db->prepare("INSERT INTO users (username, is_active, tenant_id, email, tz) VALUES (:username, :is_active, :tenant_id, :email, :tz)");
+        $stmt->bindValue(':username', $user['username']);
+        $stmt->bindValue(':is_active', $user['is_active']);
         $stmt->bindValue(':tenant_id', $user['tenant_id'] ? $user['tenant_id'] : null);
+        $stmt->bindValue(':email', $user['email'] ? $user['email'] : null);
+        $stmt->bindValue(':tz', $user['tz'] ? $user['tz'] : 'Asia/Jakarta');
         $stmt->execute();
+
+        $id = $this->db->lastInsertId();
+        if (strlen($user['password']) > 0 && strlen($user['password_repeat']) > 0) {
+            $valid = true;
+
+            if (strlen($user['password']) < 6) {
+                $this->flash->addMessage('errors', 'Panjang password minimal 6 karakter');
+                $valid = false;
+            }
+
+            if ($user['password'] != $user['password_repeat']) {
+                $this->flash->addMessage('errors', 'Password tidak sesuai');
+                $valid = false;
+            }
+
+            if (!$valid) {
+                return $this->redirect($response, $this->route('editUser', ['id' => $id]));
+            }
+
+            $stmt = $this->db->prepare("UPDATE users set password=:password WHERE id=:id");
+            $stmt->bindValue(':password', password_hash($user['password'], PASSWORD_DEFAULT));
+            $stmt->bindValue(':id', $id);
+            $stmt->execute();
+        }
         
         $referer = $request->getParam('_referer', $this->route('users'));
         
         return $this->redirect($response, $referer, [
-            'messages' => "Users {$user[sn]} telah ditambahkan"
+            'messages' => "User {$user[username]} telah ditambahkan"
         ]);
     }
 
@@ -101,23 +127,52 @@ class UsersController extends Controller
             throw new \Slim\Exception\NotFoundException($request, $response);
         }
 
-        $user['sn'] = $request->getParam('sn', $user['sn']);
-        $user['location_id'] = $request->getParam('location_id', $user['location_id']);
+        $user['username'] = $request->getParam('username', $user['username']);
+        $user['is_active'] = $request->getParam('is_active', $user['is_active']);
         $user['tenant_id'] = $request->getParam('tenant_id', $user['tenant_id']);
+        $user['email'] = $request->getParam('email', $user['email']);
+        $user['tz'] = $request->getParam('tz', $user['tz']);
+        $user['password'] = $request->getParam('password', '');
+        $user['password_repeat'] = $request->getParam('password_repeat', '');
 
         $now = date('Y-m-d H:i:s');
 
-        $stmt = $this->db->prepare("UPDATE users set sn=:sn, location_id=:location_id, tenant_id=:tenant_id, modified='$now' WHERE id=:id");
-        $stmt->bindValue(':sn', $user['sn']);
-        $stmt->bindValue(':location_id', $user['location_id'] ? $user['location_id'] : null);
+        $stmt = $this->db->prepare("UPDATE users set username=:username, is_active=:is_active, tenant_id=:tenant_id, email=:email, tz=:tz, modified='$now' WHERE id=:id");
+        $stmt->bindValue(':username', $user['username']);
+        $stmt->bindValue(':is_active', $user['is_active']);
         $stmt->bindValue(':tenant_id', $user['tenant_id'] ? $user['tenant_id'] : null);
+        $stmt->bindValue(':email', $user['email'] ? $user['email'] : null);
+        $stmt->bindValue(':tz', $user['tz'] ? $user['tz'] : 'Asia/Jakarta');
         $stmt->bindValue(':id', $user['id']);
         $stmt->execute();
+        
+        if (strlen($user['password']) > 0 && strlen($user['password_repeat']) > 0) {
+            $valid = true;
+
+            if (strlen($user['password']) < 6) {
+                $this->flash->addMessage('errors', 'Panjang password minimal 6 karakter');
+                $valid = false;
+            }
+
+            if ($user['password'] != $user['password_repeat']) {
+                $this->flash->addMessage('errors', 'Password tidak sesuai');
+                $valid = false;
+            }
+
+            if (!$valid) {
+                return $this->redirect($response, $this->route('editUser', ['id' => $id]));
+            }
+
+            $stmt = $this->db->prepare("UPDATE users set password=:password WHERE id=:id");
+            $stmt->bindValue(':password', password_hash($user['password'], PASSWORD_DEFAULT));
+            $stmt->bindValue(':id', $id);
+            $stmt->execute();
+        }
 
         $referer = $request->getParam('_referer', $this->route('users'));
         
         return $this->redirect($response, $referer, [
-            'messages' => "Perubahan Users {$user[sn]} telah disimpan"
+            'messages' => "Perubahan User {$user[username]} telah disimpan"
         ]);
     }
 
