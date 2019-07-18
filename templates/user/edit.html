@@ -30,7 +30,7 @@
             <div class="card">
                 <div class="card-body">
 
-                    <form action="" method="post">
+                    <form action="" method="post" onsubmit="return validate()">
                         {% if mode == 'Edit' %}
                             <input type="hidden" name="id" value="{{ user.id }}">
                         {% endif %}
@@ -59,20 +59,16 @@
                         </div>
 
                         <div class="form-group row">
-                            <label class="col-sm-3 col-form-label" for="password">Password
-                                <span class="text-danger">*</span>
-                            </label>
+                            <label class="col-sm-3 col-form-label" for="password">Password</label>
                             <div class="col-sm-9">
-                                <input class="form-control" id="password" name="password" placeholder="Password" required="required" type="password">
+                                <input class="form-control" id="password" name="password" placeholder="Password" type="password">
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label class="col-sm-3 col-form-label" for="password">Ulangi Pass.
-                                <span class="text-danger">*</span>
-                            </label>
+                            <label class="col-sm-3 col-form-label" for="password_repeat">Ulangi Pass.</label>
                             <div class="col-sm-9">
-                                <input class="form-control" id="password" name="password" placeholder="Ulangi Password" required="required" type="password">
+                                <input class="form-control" id="password_repeat" name="password_repeat" placeholder="Ulangi Password" type="password">
                             </div>
                         </div>
 
@@ -126,5 +122,28 @@
             $('#tenant_id').focus();
 
         })
+
+        validate = function() {
+            var password = $('#password').val();
+            var password_repeat = $('#password_repeat').val();
+
+            if (password.length == 0 && password_repeat.length == 0) {
+                return true;
+            }
+
+            if (password.length < 6) {
+                alert("Panjang password minimal 6 karakter");
+                $('#password').focus();
+                return false;
+            }
+
+            if (password != password_repeat) {
+                alert("Password tidak sesuai");
+                $('#password_repeat').focus();
+                return false;
+            }
+
+            return true;
+        }
     </script>
 {% endblock %}

@@ -10,7 +10,7 @@
 3. [x] Tenant : Details (List all user & logger in tenant)
 4. [x] Tenant : Details Action (Unlink & set enable user, unlink & delete logger)
 5. [x] Users : List
-6. [ ] Users : Create, Update, & Disabled (60% - logic create & update)
+6. [x] Users : Create, Update, & Disabled
 7. [x] Logger : List
 8. [x] Logger : Create, Update, & Delete
 9. [ ] Auth : Login & Logout
