@@ -80,9 +80,9 @@ $container['db'] = function($c) {
 	}
 };
 
-// session helper
+// // session helper
 // $container['session'] = function($c) {
-    // return \App\Session::getInstance();
+//     return \App\Session::getInstance();
 // };
 
 // Controllers
