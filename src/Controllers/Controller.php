@@ -22,6 +22,11 @@ class Controller
 	 * @var \PDO
 	 */
 	protected $db;
+
+	/**
+	 * @var \App\Session
+	 */
+	protected $session;
 	
 	public function __construct($app)
 	{
@@ -29,9 +34,10 @@ class Controller
 		$this->view = $app->view;
 		$this->flash = $app->flash;
 		$this->db = $app->db;
+		$this->session = \App\Session::getInstance();
 	}
 	
-	protected function view($response, $template, array $data=[])
+	protected function view(Response $response, $template, array $data=[])
 	{
 		return $this->view->render($response, $template, $data);
 	}
@@ -47,7 +53,7 @@ class Controller
 		return $this->app->get('router')->pathFor($name, $params);
 	}
 
-	protected function redirect($response, $route, array $messages=[])
+	protected function redirect(Response $response, $route, array $messages=[])
 	{
 		foreach ($messages as $key => $value) {
 			$this->flash->addMessage($key, $value);

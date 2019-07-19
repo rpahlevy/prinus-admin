@@ -6,12 +6,15 @@ use Slim\Http\Response;
 // Routes
 
 // $app->get('[/]', '\App\Controllers\TestController:test');
-$app->redirect('[/]', $_ENV['APP_URL'].'/tenant');
+$app->redirect('[/]', $_ENV['APP_URL'].'/login');
 $app->get('/login', '\App\Controllers\AuthControllers\LoginController:login')->setName('login');
-$app->get('/logout', '\App\Controllers\AuthControllers\LoginController:logout')->setName('logout');
+$app->post('/login', '\App\Controllers\AuthControllers\LoginController:handleLogin');
+$app->post('/logout', '\App\Controllers\AuthControllers\LoginController:logout')
+    ->add(\App\Middlewares\UserMiddleware::class)
+    ->setName('logout');
 
-$app->redirect('/dashboard', $_ENV['APP_URL'].'/tenant');
-$app->redirect('/home', $_ENV['APP_URL'].'/tenant');
+$app->redirect('/dashboard', $_ENV['APP_URL'].'/tenant')->setName('dashboard');
+$app->redirect('/home', $_ENV['APP_URL'].'/tenant')->setName('home');
 // $app->get('/dashboard', '\App\Controllers\DashboardController:index')->setName('dashboard');
 
 $app->group('/tenant', function() {
@@ -28,7 +31,7 @@ $app->group('/tenant', function() {
         $this->get('/edit', '\App\Controllers\TenantController:edit')->setName('editTenant');
         $this->post('/edit', '\App\Controllers\TenantController:handleEdit');
     });
-});
+})->add(\App\Middlewares\UserMiddleware::class);
 
 $app->group('/user', function() {
 
@@ -48,7 +51,7 @@ $app->group('/user', function() {
 
         $this->post('/enable', '\App\Controllers\UsersController:handleEnable')->setName('enableUser');
     });
-});
+})->add(\App\Middlewares\UserMiddleware::class);
 
 $app->group('/logger', function() {
 
@@ -68,4 +71,4 @@ $app->group('/logger', function() {
 
         $this->post('/delete', '\App\Controllers\LoggerController:handleDelete')->setName('deleteLogger');
     });
-});
+})->add(\App\Middlewares\UserMiddleware::class);
