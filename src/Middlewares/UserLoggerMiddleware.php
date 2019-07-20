@@ -11,8 +11,8 @@ class UserLoggerMiddleware extends Controller
     public function __invoke(Request $request, Response $response, $next)
     {
         // before
-        $path = explode("/", $request->getUri()->getPath());
-        $logger_id = intval($path[count($path)-1]);
+        $args = $request->getAttribute('routeInfo')[2];
+        $logger_id = intval($args['id']);
         $stmt = $this->db->prepare("SELECT * FROM logger WHERE id=:id");
         $stmt->execute([':id' => $id]);
         $logger = $stmt->fetch();
