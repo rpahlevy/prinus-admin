@@ -41,7 +41,7 @@
                             <label class="col-sm-3 col-form-label" for="tenant_id">Tenant</label>
                             <div class="col-sm-9">
                                 <select class="form-control" id="tenant_id" name="tenant_id">
-                                    <option selected value="null">- Tidak ada Tenant -</option>
+                                    <option selected value="">- Tidak ada Tenant -</option>
                                     {% for tenant in tenants %}
                                         <option value="{{ tenant.id }}" {% if tenant.id == user.tenant_id %} selected {% endif %}>{{ tenant.nama }}</option>
                                     {% endfor %}
@@ -54,7 +54,7 @@
                                 <span class="text-danger">*</span>
                             </label>
                             <div class="col-sm-9">
-                                <input type="text" name="username" id="username" class="form-control" required="required" value="{{ user.username }}" placeholder="Username">
+                                <input type="text" name="username" id="username" class="form-control" required="required" value="{{ user.username }}" maxlength="12" placeholder="Username">
                             </div>
                         </div>
 
