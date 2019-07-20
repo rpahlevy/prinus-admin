@@ -21,8 +21,11 @@ $app->group('/tenant', function() {
 
     $this->get('', '\App\Controllers\TenantController:index')->setName('tenant');
 
-    $this->get('/add', '\App\Controllers\TenantController:add')->setName('addTenant');
-    $this->post('/add', '\App\Controllers\TenantController:handleAdd');
+    $this->group('/add', function() {
+
+        $this->get('', '\App\Controllers\TenantController:add')->setName('addTenant');
+        $this->post('', '\App\Controllers\TenantController:handleAdd');
+    })->add(\App\Middlewares\AdminMiddleware::class);
 
     $this->group('/{id}', function() {
 
@@ -30,7 +33,7 @@ $app->group('/tenant', function() {
 
         $this->get('/edit', '\App\Controllers\TenantController:edit')->setName('editTenant');
         $this->post('/edit', '\App\Controllers\TenantController:handleEdit');
-    });
+    })->add(\App\Middlewares\UserTenantMiddleware::class);
 })->add(\App\Middlewares\UserMiddleware::class);
 
 $app->group('/user', function() {
@@ -42,7 +45,7 @@ $app->group('/user', function() {
 
     $this->group('/{id}', function() {
 
-        $this->get('', '\App\Controllers\UsersController:detail')->setName('detailUser');
+        // $this->get('', '\App\Controllers\UsersController:detail')->setName('detailUser');
 
         $this->get('/edit', '\App\Controllers\UsersController:edit')->setName('editUser');
         $this->post('/edit', '\App\Controllers\UsersController:handleEdit');

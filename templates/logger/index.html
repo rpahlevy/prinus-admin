@@ -7,7 +7,11 @@
 <!-- Page Heading -->
 <div class="d-flex align-items-center justify-content-between mb-4">
 	<h1 class="h3 mb-0 text-gray-800">Logger</h1>
-	<a href="{{ path_for('addLogger') }}" class="btn btn-sm btn-primary" id="btn-create">Add new</a>
+	{% if user()['tenant_id'] > 0 %}
+		<a href="{{ path_for('addLogger') }}?t={{ user()['tenant_id'] }}" class="btn btn-sm btn-primary" id="btn-create">Add new</a>
+	{% else %}
+		<a href="{{ path_for('addLogger') }}" class="btn btn-sm btn-primary" id="btn-create">Add new</a>
+	{% endif %}
 </div>
 
 <div class="row align-items-stretch mb-4">

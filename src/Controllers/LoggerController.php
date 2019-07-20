@@ -10,16 +10,36 @@ class LoggerController extends Controller
 {
     public function index(Request $request, Response $response, $args)
     {
-        $loggers = $this->db->query("SELECT
-                logger.*,
-                COALESCE(tenant.nama, '-') as nama_tenant
-            FROM
-                logger
-                LEFT JOIN tenant ON (logger.tenant_id = tenant.id)
-            ORDER BY
-                tenant.nama,
-                logger.sn
-            ")->fetchAll();
+        $user = $this->app->user;
+
+        if ($user['tenant_id'] > 0)
+        {
+            $loggers = $this->db->query("SELECT
+                    logger.*,
+                    COALESCE(tenant.nama, '-') as nama_tenant
+                FROM
+                    logger
+                    LEFT JOIN tenant ON (logger.tenant_id = tenant.id)
+                WHERE
+                    logger.tenant_id = {$user['tenant_id']}
+                ORDER BY
+                    tenant.nama,
+                    logger.sn
+                ")->fetchAll();
+        }
+        else
+        {
+            $loggers = $this->db->query("SELECT
+                    logger.*,
+                    COALESCE(tenant.nama, '-') as nama_tenant
+                FROM
+                    logger
+                    LEFT JOIN tenant ON (logger.tenant_id = tenant.id)
+                ORDER BY
+                    tenant.nama,
+                    logger.sn
+                ")->fetchAll();
+        }
 
         return $this->view($response, 'logger/index.html', [
             'loggers' => $loggers
@@ -28,13 +48,19 @@ class LoggerController extends Controller
 
     public function add(Request $request, Response $response, $args)
     {
+        $user = $this->app->user;
+
         $logger = [
             'sn' => '',
             'location_id' => '',
-            'tenant_id' => intval($request->getParam('t', 0)),
+            'tenant_id' => $user['tenant_id'] ?: intval($request->getParam('t', 0)),
         ];
 
-        $tenants = $this->db->query("SELECT * FROM tenant ORDER BY nama")->fetchAll();
+        if ($user['tenant_id'] > 0) {
+            $tenants = $this->db->query("SELECT * FROM tenant WHERE id={$user['tenant_id']} ORDER BY nama")->fetchAll();
+        } else {
+            $tenants = $this->db->query("SELECT * FROM tenant ORDER BY nama")->fetchAll();
+        }
         $referer = $this->referer($request, $this->route('logger'));
 
         return $this->view($response, 'logger/edit.html', [
