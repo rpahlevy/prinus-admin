@@ -10,6 +10,19 @@ class TenantController extends Controller
 {
     public function index(Request $request, Response $response, $args)
     {
+        $user = $this->app->user;
+        if ($user['tenant_id'] > 0) {
+            return $this->redirect($response, $this->route('detailTenant', ['id' => $user['tenant_id']]));
+        }
+        // $q = "SELECT * FROM tenant ";
+
+        // $user = $this->app->user;
+        // if ($user && $user['tenant_id'] > 0) {
+        //     $q .= "WHERE id={$user[tenant_id]} ";
+        // }
+
+        // $q .= "ORDER BY nama";
+
         $tenants = $this->db->query("SELECT * FROM tenant ORDER BY nama")->fetchAll();
         foreach ($tenants as &$tenant) {
             $tenant['jml_user'] = $this->db->query("SELECT COUNT(id) FROM users WHERE tenant_id={$tenant['id']}")->fetchColumn();

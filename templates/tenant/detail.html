@@ -46,9 +46,11 @@
                         <i class="fa fa-user"></i>
                         User -
                         {{ tenant.jml_user }}</h6>
-                    <a href="{{ path_for('addUser') }}?t={{ tenant.id }}" class="btn btn-sm btn-light">
-                        <i class="fa fa-plus"></i>
-                    </a>
+                    {% if user()['tenant_id'] <= 0 %}
+                        <a href="{{ path_for('addUser') }}?t={{ tenant.id }}" class="btn btn-sm btn-light">
+                            <i class="fa fa-plus"></i>
+                        </a>
+                    {% endif %}
                 </div>
                 <div class="card-body">
 
@@ -63,26 +65,29 @@
                                         <i class="fa fa-check-circle text-success"></i>
                                     {% endif %}
                                 </h3>
-                                <div class="tools">
-                                    <form class="d-inline" action="{{ path_for('unlinkUser', {id: user.id}) }}" method="post" onsubmit="return confirmUnlinkUser('{{ user.username }}')">
-                                        <button class="btn btn-link text-warning btn-sm" role="button">
-                                            <i class="fa fa-unlink"></i>
-                                        </button>
-                                    </form>
-                                    <form class="d-inline" action="{{ path_for('enableUser', {id: user.id}) }}" method="post" onsubmit="return confirmEnabled('{{ user.username }}', {{ user.is_active != 0 }})">
-                                        <input type="hidden" name="is_active" value="{{ (user.is_active + 1) % 2 }}">
-        
-                                        {% if user.is_active == 0 %}
-                                            <button class="btn btn-link text-success btn-sm" role="button">
-                                                <i class="fa fa-check"></i>
+
+                                {% if user()['tenant_id'] <= 0 %}
+                                    <div class="tools">
+                                        <form class="d-inline" action="{{ path_for('unlinkUser', {id: user.id}) }}" method="post" onsubmit="return confirmUnlinkUser('{{ user.username }}')">
+                                            <button class="btn btn-link text-warning btn-sm" role="button">
+                                                <i class="fa fa-unlink"></i>
                                             </button>
-                                        {% else %}
-                                            <button class="btn btn-link text-danger btn-sm" role="button">
-                                                <i class="fa fa-times"></i>
-                                            </button>
-                                        {% endif %}
-                                    </form>
-                                </div>
+                                        </form>
+                                        <form class="d-inline" action="{{ path_for('enableUser', {id: user.id}) }}" method="post" onsubmit="return confirmEnabled('{{ user.username }}', {{ user.is_active != 0 }})">
+                                            <input type="hidden" name="is_active" value="{{ (user.is_active + 1) % 2 }}">
+            
+                                            {% if user.is_active == 0 %}
+                                                <button class="btn btn-link text-success btn-sm" role="button">
+                                                    <i class="fa fa-check"></i>
+                                                </button>
+                                            {% else %}
+                                                <button class="btn btn-link text-danger btn-sm" role="button">
+                                                    <i class="fa fa-times"></i>
+                                                </button>
+                                            {% endif %}
+                                        </form>
+                                    </div>
+                                {% endif %}
                             </div>
                         </div>
                     {% else %}

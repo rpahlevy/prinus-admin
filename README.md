@@ -13,5 +13,5 @@
 6. [x] Users : Create, Update, & Disabled
 7. [x] Logger : List
 8. [x] Logger : Create, Update, & Delete
-9. [ ] Auth : Login & Logout
-10. [ ] Auth : Filter Level -> Admin & User Tenant
+9. [x] Auth : Login & Logout
+10. [x] Auth : Filter Level -> Admin & User Tenant
