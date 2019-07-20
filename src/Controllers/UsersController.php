@@ -55,6 +55,10 @@ class UsersController extends Controller
     {
         $user = $request->getParams();
 
+        if (strlen($user['username']) > 12) {
+            return $this->redirect($response, $this->route('addUser'), ['errors' => 'Username terlalu panjang, max. 12 karakter']);
+        }
+
         $stmt = $this->db->prepare("INSERT INTO users (username, is_active, tenant_id, email, tz) VALUES (:username, :is_active, :tenant_id, :email, :tz)");
         $stmt->bindValue(':username', $user['username']);
         $stmt->bindValue(':is_active', $user['is_active']);

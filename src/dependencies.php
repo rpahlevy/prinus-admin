@@ -80,12 +80,16 @@ $container['db'] = function($c) {
 	}
 };
 
-// // session helper
-// $container['session'] = function($c) {
-//     return \App\Session::getInstance();
-// };
+// active user
+$container['user'] = function($c) {
+    $session = \App\Session::getInstance();
+	$user_id = $session->user_id;
+	if (empty($user_id)) {
+		return null;
+	}
 
-// Controllers
-$container[\App\Controllers\TestController::class] = function ($c) {
-	return new \App\Controllers\TestController($c);
+	$stmt = $c->db->prepare("SELECT * FROM users WHERE id=:id AND is_active=true");
+	$stmt->execute([':id' => $user_id]);
+	$user = $stmt->fetch();
+	return $user ?: null;
 };

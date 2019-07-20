@@ -19,10 +19,12 @@
 				<p class="text-muted mb-0">{{ tenant.slug }}</p>
 			</div>
 			<div class="text-right">
-				<a href="#" class="btn btn-success btn-sm btn-icon-split" role="button">
-					<span class="text">{{ tenant.jml_user }} user</span>
-					<span class="icon text-white-50"><i class="fa fa-user-plus text-white-50"></i></span>
-				</a>
+				{% if user()['tenant_id'] <= 0 %}
+					<a href="#" class="btn btn-success btn-sm btn-icon-split" role="button">
+						<span class="text">{{ tenant.jml_user }} user</span>
+						<span class="icon text-white-50"><i class="fa fa-user-plus text-white-50"></i></span>
+					</a>
+				{% endif %}
 				<a href="{{ path_for('addLogger') }}?t={{ tenant.id }}" class="btn btn-info btn-sm btn-icon-split" role="button">
 					<span class="text">{{ tenant.jml_logger }} logger</span>
 					<span class="icon text-white-50"><i class="fa fa-plus-circle text-white-50"></i></span>

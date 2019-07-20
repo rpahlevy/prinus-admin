@@ -12,16 +12,7 @@ $asset = new Twig_SimpleFunction('asset', function ($path) {
 // 	return \App\Session::getInstance();
 // });
 $user = new Twig_SimpleFunction('user', function () use ($container) {
-	$session = \App\Session::getInstance();
-	$user_id = $session->user_id;
-	if (empty($user_id)) {
-		return null;
-	}
-
-	$stmt = $container->db->prepare("SELECT * FROM users WHERE id=:id AND is_active=1");
-	$stmt->execute([':id' => $user_id]);
-	$user = $stmt->fetch();
-	return $user ?: null;
+	return $container->get('user');
 });
 
 $container->get('view')->getEnvironment()->addFunction($env);

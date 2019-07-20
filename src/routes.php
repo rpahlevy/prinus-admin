@@ -51,7 +51,7 @@ $app->group('/user', function() {
 
         $this->post('/enable', '\App\Controllers\UsersController:handleEnable')->setName('enableUser');
     });
-})->add(\App\Middlewares\UserMiddleware::class);
+})->add(\App\Middlewares\AdminMiddleware::class);
 
 $app->group('/logger', function() {
 

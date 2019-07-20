@@ -21,9 +21,17 @@
 
     <!-- Nav Item - Tenant -->
     <li class="nav-item">
-        <a class="nav-link" href="{{ path_for('tenant') }}">
-            <i class="fa fa-fw fa-building-o"></i>
-            <span>Tenant</span></a>
+        {% if user()['tenant_id'] <= 0 %}
+            <a class="nav-link" href="{{ path_for('tenant') }}">
+                <i class="fa fa-fw fa-building-o"></i>
+                <span>Tenant</span>
+            </a>
+        {% else %}
+            <a class="nav-link" href="{{ path_for('detailTenant', {id: user()['tenant_id']}) }}">
+                <i class="fa fa-fw fa-building-o"></i>
+                <span>Tenant</span>
+            </a>
+        {% endif %}
     </li>
 
     <!-- Nav Item - Logger -->
@@ -33,19 +41,22 @@
             <span>Logger</span></a>
     </li>
 
-    <!-- Nav Item - User -->
-    <li class="nav-item">
-        <a class="nav-link" href="{{ path_for('users') }}">
-            <i class="fa fa-fw fa-users"></i>
-            <span>Users</span></a>
-    </li>
+    {% if user()['tenant_id'] <= 0 %}
+        <!-- Nav Item - User -->
+        <li class="nav-item">
+            <a class="nav-link" href="{{ path_for('users') }}">
+                <i class="fa fa-fw fa-users"></i>
+                <span>Users</span></a>
+        </li>
+    {% endif %}
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block mb-0">
 
     <!-- Nav Item - Logout -->
     <li class="nav-item">
-        <a class="nav-link" href="">
+        <form action="{{ path_for('logout') }}" method="post" id="form-logout"></form>
+        <a class="nav-link" href="#" onclick="$('#form-logout').submit()">
             <i class="fa fa-fw fa-sign-out"></i>
             <span>Logout</span></a>
     </li>

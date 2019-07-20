@@ -20,7 +20,7 @@ class LoginController extends Controller
             return $this->redirect($response, $this->route('login'), ['errors' => 'Masukkan username dan password']);
         }
         
-        $stmt = $this->db->prepare("SELECT * FROM users WHERE username=:username AND is_active=1");
+        $stmt = $this->db->prepare("SELECT * FROM users WHERE username=:username AND is_active=true");
         $stmt->execute([':username' => $credentials['username']]);
         $user = $stmt->fetch();
         if (!$user || !password_verify($credentials['password'], $user['password'])) {
@@ -37,5 +37,11 @@ class LoginController extends Controller
         $this->session->user_refresh_time = strtotime("+1hour");
 
         return $this->redirect($response, $this->route('dashboard'));
+    }
+
+    public function logout($request, $response, $args)
+    {
+        $this->session->destroy();
+        return $this->redirect($response, $this->route('login'));
     }
 }
