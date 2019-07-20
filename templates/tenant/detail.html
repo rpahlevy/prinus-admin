@@ -6,14 +6,16 @@
 
     <!-- Page Heading -->
     <div class="d-flex align-items-center justify-content-start mb-4">
-        <h2 class="h3 mb-0">
-            <a href="{{ path_for('tenant') }}" class="" role="button">
-                Tenant
-            </a>
-        </h2>
-        <span class="mx-3">
-            <i class="fa fa-angle-right"></i>
-        </span>
+        {% if user()['tenant_id'] <= 0 %}
+            <h2 class="h3 mb-0">
+                <a href="{{ path_for('tenant') }}" class="" role="button">
+                    Tenant
+                </a>
+            </h2>
+            <span class="mx-3">
+                <i class="fa fa-angle-right"></i>
+            </span>
+        {% endif %}
         <h2 class="h3 mb-0 text-gray-800">{{ tenant.nama }}</h2>
     </div>
 
