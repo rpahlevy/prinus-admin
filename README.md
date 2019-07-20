@@ -1,7 +1,8 @@
 # PRINUS ADMIN
 
 1. Duplicate .env.template to .env
-2. Masukkan detail database & APP_URL
+2. Masukkan detail database & APP_URL (localhost:8080 jika menggunakan built in php server)
+3. `composer install` && `composer start` (built in php server)
 
 ## TODO
 
@@ -15,3 +16,13 @@
 8. [x] Logger : Create, Update, & Delete
 9. [x] Auth : Login & Logout
 10. [x] Auth : Filter Level -> Admin & User Tenant
+
+## Users
+
+Untuk dapat menambah / set password user:
+
+1. Comment AdminMiddleware pada group `/user`
+2. Akses path `/user`
+3. Tambahkan admin baru / set password admin yg sudah ada (user tanpa tenant)
+4. Uncomment AdminMiddleware pada group `/user`
+5. Login pada path `/login`
