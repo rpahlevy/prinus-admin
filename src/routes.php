@@ -50,7 +50,7 @@ $app->group('/user', function() {
         $this->get('/edit', '\App\Controllers\UsersController:edit')->setName('editUser');
         $this->post('/edit', '\App\Controllers\UsersController:handleEdit');
 
-        $this->post('/unlink', '\App\Controllers\UsersController:handleUnlink')->setName('unlinkUser');
+        // $this->post('/unlink', '\App\Controllers\UsersController:handleUnlink')->setName('unlinkUser');
 
         $this->post('/enable', '\App\Controllers\UsersController:handleEnable')->setName('enableUser');
     })->add(\App\Middlewares\UsersMiddleware::class);
@@ -70,8 +70,8 @@ $app->group('/logger', function() {
         $this->get('/edit', '\App\Controllers\LoggerController:edit')->setName('editLogger');
         $this->post('/edit', '\App\Controllers\LoggerController:handleEdit');
 
-        $this->post('/unlink', '\App\Controllers\LoggerController:handleUnlink')->setName('unlinkLogger');
+        // $this->post('/unlink', '\App\Controllers\LoggerController:handleUnlink')->setName('unlinkLogger');
 
-        $this->post('/delete', '\App\Controllers\LoggerController:handleDelete')->setName('deleteLogger');
+        // $this->post('/delete', '\App\Controllers\LoggerController:handleDelete')->setName('deleteLogger');
     })->add(\App\Middlewares\LoggerMiddleware::class);
 })->add(\App\Middlewares\AuthMiddlewares\UserMiddleware::class);
