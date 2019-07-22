@@ -31,8 +31,8 @@
                                     <i class="fa fa-check-circle text-success"></i>
                                 {% endif %}
                             </div>
-                            <div class="h6 mb-3 font-weight-slim text-body">{{ user.email ? user.email : '-' }}</div>
-                            <div class="h6 mb-0 font-weight-slim text-body"><i class="fa fa-clock-o"></i> {{ user.tz }}</div>
+                            <div class="h6 mb-3 text-dark">{{ user.email ? user.email : '-' }}</div>
+                            <div class="h6 mb-0 text-muted"><i class="fa fa-clock-o"></i> {{ user.tz }}</div>
                         </div>
                         <div class="text-right">
                             <form class="d-inline" action="{{ path_for('enableUser', {id: user.id}) }}" method="post" onsubmit="return confirmEnabled('{{ user.username }}', {{ user.is_active != 0 }})">
