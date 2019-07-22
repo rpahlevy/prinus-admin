@@ -90,14 +90,7 @@ class LoggerController extends Controller
 
     public function edit(Request $request, Response $response, $args)
     {
-        $id = isset($args['id']) ? intval($args['id']) : 0;
-        $stmt = $this->db->prepare("SELECT * FROM logger WHERE id=:id");
-        $stmt->execute([':id' => $id]);
-        $logger = $stmt->fetch();
-        if (!$logger) {
-            throw new \Slim\Exception\NotFoundException($request, $response);
-        }
-
+        $logger = $request->getAttribute('logger');
         $tenants = $this->db->query("SELECT * FROM tenant ORDER BY nama")->fetchAll();
         $referer = $this->referer($request, $this->route('logger'));
 
@@ -111,14 +104,7 @@ class LoggerController extends Controller
 
     public function handleEdit(Request $request, Response $response, $args)
     {
-        $id = isset($args['id']) ? intval($args['id']) : 0;
-        $stmt = $this->db->prepare("SELECT * FROM logger WHERE id=:id");
-        $stmt->execute([':id' => $id]);
-        $logger = $stmt->fetch();
-        if (!$logger) {
-            throw new \Slim\Exception\NotFoundException($request, $response);
-        }
-
+        $logger = $request->getAttribute('logger');
         $logger['sn'] = $request->getParam('sn', $logger['sn']);
         $logger['location_id'] = $request->getParam('location_id', $logger['location_id']);
         $logger['tenant_id'] = $request->getParam('tenant_id', $logger['tenant_id']);
@@ -141,16 +127,9 @@ class LoggerController extends Controller
 
     public function handleUnlink(Request $request, Response $response, $args)
     {
-        $id = isset($args['id']) ? intval($args['id']) : 0;
-        $stmt = $this->db->prepare("SELECT * FROM logger WHERE id=:id");
-        $stmt->execute([':id' => $id]);
-        $logger = $stmt->fetch();
-        if (!$logger) {
-            throw new \Slim\Exception\NotFoundException($request, $response);
-        }
-
+        $logger = $request->getAttribute('logger');
         $stmt = $this->db->prepare("UPDATE logger SET tenant_id=null WHERE id=:id");
-        $stmt->execute([':id' => $id]);
+        $stmt->execute([':id' => $logger['id']]);
 
         $referer = $this->referer($request, $this->route('logger'));
         
@@ -161,16 +140,9 @@ class LoggerController extends Controller
 
     public function handleDelete(Request $request, Response $response, $args)
     {
-        $id = isset($args['id']) ? intval($args['id']) : 0;
-        $stmt = $this->db->prepare("SELECT * FROM logger WHERE id=:id");
-        $stmt->execute([':id' => $id]);
-        $logger = $stmt->fetch();
-        if (!$logger) {
-            throw new \Slim\Exception\NotFoundException($request, $response);
-        }
-
+        $logger = $request->getAttribute('logger');
         $stmt = $this->db->prepare("DELETE FROM logger WHERE id=:id");
-        $stmt->execute([':id' => $id]);
+        $stmt->execute([':id' => $logger['id']]);
 
         $referer = $this->referer($request, $this->route('logger'));
         
@@ -181,21 +153,15 @@ class LoggerController extends Controller
 
     // public function detail(Request $request, Response $response, $args)
     // {
-    //     $id = isset($args['id']) ? intval($args['id']) : 0;
-    //     $stmt = $this->db->prepare("SELECT * FROM logger WHERE logger.id=:id");
-    //     $stmt->execute([':id' => $id]);
-    //     $logger = $stmt->fetch();
-    //     if (!$logger) {
-    //         throw new \Slim\Exception\NotFoundException($request, $response);
-    //     }
+    //     $logger = $request->getAttribute('logger');
 
     //     $stmt_users = $this->db->prepare("SELECT * from users WHERE logger_id=:id");
-    //     $stmt_users->execute([':id' => $id]);
+    //     $stmt_users->execute([':id' => $logger['id']]);
     //     $users = $stmt_users->fetchAll();
     //     $logger['jml_user'] = count($users);
         
     //     $stmt_logger = $this->db->prepare("SELECT * from logger WHERE logger_id=:id");
-    //     $stmt_logger->execute([':id' => $id]);
+    //     $stmt_logger->execute([':id' => $logger['id']]);
     //     $loggers = $stmt_logger->fetchAll();
     //     $logger['jml_logger'] = count($loggers);
 

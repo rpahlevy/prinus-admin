@@ -10,7 +10,7 @@ $app->redirect('[/]', $_ENV['APP_URL'].'/login');
 $app->get('/login', '\App\Controllers\AuthControllers\LoginController:login')->setName('login');
 $app->post('/login', '\App\Controllers\AuthControllers\LoginController:handleLogin');
 $app->post('/logout', '\App\Controllers\AuthControllers\LoginController:logout')
-    ->add(\App\Middlewares\UserMiddleware::class)
+    ->add(\App\Middlewares\AuthMiddlewares\UserMiddleware::class)
     ->setName('logout');
 
 $app->redirect('/dashboard', $_ENV['APP_URL'].'/tenant')->setName('dashboard');
@@ -25,7 +25,7 @@ $app->group('/tenant', function() {
 
         $this->get('', '\App\Controllers\TenantController:add')->setName('addTenant');
         $this->post('', '\App\Controllers\TenantController:handleAdd');
-    })->add(\App\Middlewares\AdminMiddleware::class);
+    })->add(\App\Middlewares\AuthMiddlewares\AdminMiddleware::class);
 
     $this->group('/{id}', function() {
 
@@ -33,8 +33,8 @@ $app->group('/tenant', function() {
 
         $this->get('/edit', '\App\Controllers\TenantController:edit')->setName('editTenant');
         $this->post('/edit', '\App\Controllers\TenantController:handleEdit');
-    })->add(\App\Middlewares\UserTenantMiddleware::class);
-})->add(\App\Middlewares\UserMiddleware::class);
+    })->add(\App\Middlewares\TenantMiddleware::class);
+})->add(\App\Middlewares\AuthMiddlewares\UserMiddleware::class);
 
 $app->group('/user', function() {
 
@@ -53,8 +53,8 @@ $app->group('/user', function() {
         $this->post('/unlink', '\App\Controllers\UsersController:handleUnlink')->setName('unlinkUser');
 
         $this->post('/enable', '\App\Controllers\UsersController:handleEnable')->setName('enableUser');
-    });
-})->add(\App\Middlewares\AdminMiddleware::class);
+    })->add(\App\Middlewares\UsersMiddleware::class);
+})->add(\App\Middlewares\AuthMiddlewares\AdminMiddleware::class);
 
 $app->group('/logger', function() {
 
@@ -73,5 +73,5 @@ $app->group('/logger', function() {
         $this->post('/unlink', '\App\Controllers\LoggerController:handleUnlink')->setName('unlinkLogger');
 
         $this->post('/delete', '\App\Controllers\LoggerController:handleDelete')->setName('deleteLogger');
-    });
-})->add(\App\Middlewares\UserMiddleware::class);
+    })->add(\App\Middlewares\LoggerMiddleware::class);
+})->add(\App\Middlewares\AuthMiddlewares\UserMiddleware::class);
