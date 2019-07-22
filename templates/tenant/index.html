@@ -20,7 +20,7 @@
 			</div>
 			<div class="text-right">
 				{% if user()['tenant_id'] <= 0 %}
-					<a href="#" class="btn btn-success btn-sm btn-icon-split" role="button">
+					<a href="{{ path_for('addUser') }}?t={{ tenant.id }}" class="btn btn-success btn-sm btn-icon-split" role="button">
 						<span class="text">{{ tenant.jml_user }} user</span>
 						<span class="icon text-white-50"><i class="fa fa-user-plus text-white-50"></i></span>
 					</a>

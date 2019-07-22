@@ -100,14 +100,7 @@ class UsersController extends Controller
 
     public function edit(Request $request, Response $response, $args)
     {
-        $id = isset($args['id']) ? intval($args['id']) : 0;
-        $stmt = $this->db->prepare("SELECT * FROM users WHERE id=:id");
-        $stmt->execute([':id' => $id]);
-        $user = $stmt->fetch();
-        if (!$user) {
-            throw new \Slim\Exception\NotFoundException($request, $response);
-        }
-
+        $user = $request->getAttribute('user');
         $tenants = $this->db->query("SELECT * FROM tenant ORDER BY nama")->fetchAll();
         $timezones = DateTimeZone::listIdentifiers(DateTimeZone::ALL);
         $referer = $this->referer($request, $this->route('users'));
@@ -123,14 +116,7 @@ class UsersController extends Controller
 
     public function handleEdit(Request $request, Response $response, $args)
     {
-        $id = isset($args['id']) ? intval($args['id']) : 0;
-        $stmt = $this->db->prepare("SELECT * FROM users WHERE id=:id");
-        $stmt->execute([':id' => $id]);
-        $user = $stmt->fetch();
-        if (!$user) {
-            throw new \Slim\Exception\NotFoundException($request, $response);
-        }
-
+        $user = $request->getAttribute('user');
         $user['username'] = $request->getParam('username', $user['username']);
         $user['is_active'] = $request->getParam('is_active', $user['is_active']);
         $user['tenant_id'] = $request->getParam('tenant_id', $user['tenant_id']);
@@ -164,12 +150,12 @@ class UsersController extends Controller
             }
 
             if (!$valid) {
-                return $this->redirect($response, $this->route('editUser', ['id' => $id]));
+                return $this->redirect($response, $this->route('editUser', ['id' => $user['id']]));
             }
 
             $stmt = $this->db->prepare("UPDATE users set password=:password WHERE id=:id");
             $stmt->bindValue(':password', password_hash($user['password'], PASSWORD_DEFAULT));
-            $stmt->bindValue(':id', $id);
+            $stmt->bindValue(':id', $user['id']);
             $stmt->execute();
         }
 
@@ -182,16 +168,9 @@ class UsersController extends Controller
 
     public function handleUnlink(Request $request, Response $response, $args)
     {
-        $id = isset($args['id']) ? intval($args['id']) : 0;
-        $stmt = $this->db->prepare("SELECT * FROM users WHERE id=:id");
-        $stmt->execute([':id' => $id]);
-        $user = $stmt->fetch();
-        if (!$user) {
-            throw new \Slim\Exception\NotFoundException($request, $response);
-        }
-
+        $user = $request->getAttribute('user');
         $stmt = $this->db->prepare("UPDATE users SET tenant_id=null WHERE id=:id");
-        $stmt->execute([':id' => $id]);
+        $stmt->execute([':id' => $user['id']]);
 
         $referer = $this->referer($request, $this->route('users'));
         
@@ -202,14 +181,7 @@ class UsersController extends Controller
 
     public function handleEnable(Request $request, Response $response, $args)
     {
-        $id = isset($args['id']) ? intval($args['id']) : 0;
-        $stmt = $this->db->prepare("SELECT * FROM users WHERE id=:id");
-        $stmt->execute([':id' => $id]);
-        $user = $stmt->fetch();
-        if (!$user) {
-            throw new \Slim\Exception\NotFoundException($request, $response);
-        }
-
+        $user = $request->getAttribute('user');
         $user['is_active'] = $request->getParam('is_active', $user['is_active']);
 
         $now = date('Y-m-d H:i:s');
@@ -228,21 +200,14 @@ class UsersController extends Controller
 
     // public function detail(Request $request, Response $response, $args)
     // {
-    //     $id = isset($args['id']) ? intval($args['id']) : 0;
-    //     $stmt = $this->db->prepare("SELECT * FROM users WHERE users.id=:id");
-    //     $stmt->execute([':id' => $id]);
-    //     $user = $stmt->fetch();
-    //     if (!$user) {
-    //         throw new \Slim\Exception\NotFoundException($request, $response);
-    //     }
-
+    //     $user = $request->getAttribute('user');
     //     $stmt_users = $this->db->prepare("SELECT * from users WHERE user_id=:id");
-    //     $stmt_users->execute([':id' => $id]);
+    //     $stmt_users->execute([':id' => $user['id']]);
     //     $users = $stmt_users->fetchAll();
     //     $user['jml_user'] = count($users);
         
     //     $stmt_user = $this->db->prepare("SELECT * FROM users WHERE user_id=:id");
-    //     $stmt_user->execute([':id' => $id]);
+    //     $stmt_user->execute([':id' => $user['id']]);
     //     $users = $stmt_user->fetchAll();
     //     $user['jml_user'] = count($users);
 

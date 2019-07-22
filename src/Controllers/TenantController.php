@@ -69,14 +69,7 @@ class TenantController extends Controller
 
     public function edit(Request $request, Response $response, $args)
     {
-        $id = isset($args['id']) ? intval($args['id']) : 0;
-        $stmt = $this->db->prepare("SELECT * FROM tenant WHERE id=:id");
-        $stmt->execute([':id' => $id]);
-        $tenant = $stmt->fetch();
-        if (!$tenant) {
-            throw new \Slim\Exception\NotFoundException($request, $response);
-        }
-
+        $tenant = $request->getAttribute('tenant');
         $referer = $this->referer($request, $this->route('tenant'));
 
         return $this->view($response, 'tenant/edit.html', [
@@ -88,14 +81,7 @@ class TenantController extends Controller
 
     public function handleEdit(Request $request, Response $response, $args)
     {
-        $id = isset($args['id']) ? intval($args['id']) : 0;
-        $stmt = $this->db->prepare("SELECT * FROM tenant WHERE id=:id");
-        $stmt->execute([':id' => $id]);
-        $tenant = $stmt->fetch();
-        if (!$tenant) {
-            throw new \Slim\Exception\NotFoundException($request, $response);
-        }
-
+        $tenant = $request->getAttribute('tenant');
         $tenant['nama'] = $request->getParam('nama', $tenant['nama']);
         $tenant['slug'] = $request->getParam('slug', $tenant['slug']);
 
@@ -116,33 +102,15 @@ class TenantController extends Controller
 
     public function detail(Request $request, Response $response, $args)
     {
-        $id = isset($args['id']) ? intval($args['id']) : 0;
-        // $stmt = $this->db->prepare("SELECT
-        //         tenant.*,
-        //         COUNT(users.id) as jml_user,
-        //         COUNT(logger.id) as jml_logger
-        //     FROM
-        //         tenant
-        //         LEFT JOIN users ON (tenant.id = users.tenant_id)
-        //         LEFT JOIN logger ON (tenant.id = logger.tenant_id)
-        //     WHERE
-        //         tenant.id=:id
-        //     GROUP BY
-        //         tenant.id");
-        $stmt = $this->db->prepare("SELECT * FROM tenant WHERE tenant.id=:id");
-        $stmt->execute([':id' => $id]);
-        $tenant = $stmt->fetch();
-        if (!$tenant) {
-            throw new \Slim\Exception\NotFoundException($request, $response);
-        }
+        $tenant = $request->getAttribute('tenant');
 
         $stmt_users = $this->db->prepare("SELECT * from users WHERE tenant_id=:id");
-        $stmt_users->execute([':id' => $id]);
+        $stmt_users->execute([':id' => $tenant['id']]);
         $users = $stmt_users->fetchAll();
         $tenant['jml_user'] = count($users);
         
         $stmt_logger = $this->db->prepare("SELECT * from logger WHERE tenant_id=:id");
-        $stmt_logger->execute([':id' => $id]);
+        $stmt_logger->execute([':id' => $tenant['id']]);
         $loggers = $stmt_logger->fetchAll();
         $tenant['jml_logger'] = count($loggers);
 
