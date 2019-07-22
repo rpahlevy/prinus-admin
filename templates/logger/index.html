@@ -8,36 +8,54 @@
 <div class="d-flex align-items-center justify-content-between mb-4">
 	<h1 class="h3 mb-0 text-gray-800">Logger</h1>
 	{% if user()['tenant_id'] > 0 %}
-		<a href="{{ path_for('addLogger') }}?t={{ user()['tenant_id'] }}" class="btn btn-sm btn-primary" id="btn-create">Add new</a>
+		<a href="{{ path_for('addLogger') }}?t={{ user()['tenant_id'] }}" class="btn btn-primary" id="btn-create">Add new</a>
 	{% else %}
-		<a href="{{ path_for('addLogger') }}" class="btn btn-sm btn-primary" id="btn-create">Add new</a>
+		<a href="{{ path_for('addLogger') }}" class="btn btn-primary" id="btn-create">Add new</a>
 	{% endif %}
 </div>
 
-<div class="row align-items-stretch mb-4">
-	{% for logger in loggers %}
-	<div class="col-12 col-md-6 col-xl-4 mb-3">
-		<div class="card rounded-0">
-			<div class="card-body d-flex flex-column flex-lg-row justify-content-lg-between align-items-lg-start">
-				<div class="mb-3 mb-lg-0">
-					<div class="text-xs font-weight-bold text-uppercase mb-1"><a href="{{ path_for('detailTenant', {'id': logger.tenant_id}) }}" class="">{{ logger.nama_tenant }}</a></div>
-					<div class="h5 mb-0 font-weight-bold text-gray-800">{{ logger.sn }}</div>
-					<div class="h6 mb-0 font-weight-slim text-gray-500">Location ID: {{ logger.location_id ? logger.location_id : '-' }}</div>
-				</div>
-				<div class="text-right">
-					<form class="d-inline" action="{{ path_for('deleteLogger', {id: logger.id}) }}" method="post" onsubmit="return confirmDelete('{{ logger.sn }}')">
-						<button class="btn btn-danger btn-sm btn-icon-split" role="button">
-							<span class="text">Delete</span>
-							<span class="icon text-white-50"><i class="fa fa-trash text-white-50"></i></span>
-						</button>
-					</form>
-					<a href="{{ path_for('editLogger', {'id': logger.id}) }}" class="btn btn-warning btn-sm" role="button"><i class="fa fa-edit"></i></a>
-					<!-- <button class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button> -->
-				</div>
-			</div>
-		</div>
+<div class="card">
+	<div class="card-body p-0">
+		<table class="table table-hover table-bordered mb-0">
+			<thead>
+				<tr>
+					<th class="align-top text-center">#</th>
+					<th class="align-top text-center">Tenant</th>
+					<th class="align-top text-center">SN</th>
+					<th class="align-top text-center">Loc. ID</th>
+					<th class="align-top text-center">Aksi</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for logger in loggers %}
+				<tr>
+					<td class="text-right">{{ loop.index }}</td>
+					<td>
+						<h3 class="h6 mb-0 font-weight-bold"><a href="{{ path_for('detailTenant', {'id': logger.tenant_id}) }}" class="">{{ logger.nama_tenant }}</a></h3>
+					</td>
+					<td class="text-center">
+						<h3 class="h6 mb-0">{{ logger.sn }}</h3>
+					</td>
+					<td class="text-right">
+						<h3 class="h6 mb-0">{{ logger.location_id ?: '' }}</h3>
+					</td>
+					<td class="text-center w-0">
+						{# <form class="d-inline" action="{{ path_for('deleteLogger', {id: logger.id}) }}" method="post" onsubmit="return confirmDelete('{{ logger.sn }}')">
+							<button class="btn btn-danger btn-icon-split" role="button">
+								<span class="text">Delete</span>
+								<span class="icon text-white-50"><i class="fa fa-trash text-white-50"></i></span>
+							</button>
+						</form> #}
+						<a href="{{ path_for('editLogger', {'id': logger.id}) }}" class="btn btn-warning btn-sm btn-icon-split" role="button">
+							<span class="icon text-white-50"><i class="fa fa-edit"></i></span>
+							<span class="text">Edit</span>
+						</a>
+					</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
 	</div>
-	{% endfor %}
 </div>
 
 {% endblock %}
