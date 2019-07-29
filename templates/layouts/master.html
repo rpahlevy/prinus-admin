@@ -9,19 +9,19 @@
         {% include 'layouts/title.html' %}
 
         <!-- Custom fonts for this template-->
-        <link href="{{asset('css/font-awesome.min.css')}}" rel="stylesheet" type="text/css">
-        <link
-        href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+        {# <link href="{{asset('css/font-awesome.min.css')}}" rel="stylesheet" type="text/css"> #}
+        {# <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet"> #}
 
         <!-- Custom styles for this template-->
-        <link href="{{asset('css/sb-admin-2.min.css')}}" rel="stylesheet">
-        <link href="{{asset('css/app.css?v=2')}}" rel="stylesheet">
-        <style>
+        {# <link href="{{asset('css/sb-admin-2.min.css')}}" rel="stylesheet"> #}
+        <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
+        <link href="{{asset('css/app.css?v=3')}}" rel="stylesheet">
+        {# <style>
             .sidebar #sidebarToggle::after,
             .sidebar.toggled #sidebarToggle::after {
                 font-family: 'FontAwesome';
             }
-        </style>
+        </style> #}
 
         {% block css %}{% endblock %}
     </head>
@@ -33,22 +33,19 @@
         <div id="wrapper">
 
             {% if user() %}
-                {% include 'layouts/sidebar.html' %}
+                {% include 'layouts/navbar.html' %}
             {% endif %}
 
             <!-- Content Wrapper -->
-            <div
-                class="d-flex flex-column" id="content-wrapper">
+            <div class="py-5 container" id="content-wrapper">
 
                 <!-- Main Content -->
-                <div id="content">
+                <div class="mt-3 py-3" id="content">
 
-                    {% if condition %}
-                        {% include 'layouts/topbar.html' %}
-                    {% endif %}
+                    {# {% include 'layouts/topbar.html' %} #}
 
                     <!-- Begin Page Content -->
-                    <div class="container-fluid mt-sm-4">
+                    <div class="">
 
                         {% include 'includes/flash.html' %}
 
@@ -60,7 +57,7 @@
                 </div>
                 <!-- End of Main Content -->
 
-                {% include 'layouts/footer.html' %}
+                {# {% include 'layouts/footer.html' %} #}
 
             </div>
             <!-- End of Content Wrapper -->
@@ -68,17 +65,17 @@
         </div>
         <!-- End of Page Wrapper -->
 
-        {% include 'layouts/scrolltop.html' %}
+        {# {% include 'layouts/scrolltop.html' %} #}
 
         <!-- Bootstrap core JavaScript-->
         <script src="{{asset('js/jquery.min.js')}}"></script>
         <script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
 
         <!-- Core plugin JavaScript-->
-        <script src="{{asset('js/jquery.easing.min.js')}}"></script>
+        {# <script src="{{asset('js/jquery.easing.min.js')}}"></script> #}
 
         <!-- Custom scripts for all pages-->
-        <script src="{{asset('js/sb-admin-2.min.js')}}"></script>
+        {# <script src="{{asset('js/sb-admin-2.min.js')}}"></script> #}
 
         {% block js %}{% endblock %}
     </body>

@@ -39,7 +39,7 @@
 					<td class="text-right">
 						<h3 class="h6 mb-0">{{ logger.location_id ?: '' }}</h3>
 					</td>
-					<td class="text-center w-0">
+					<td class="text-center w-auto">
 						{# <form class="d-inline" action="{{ path_for('deleteLogger', {id: logger.id}) }}" method="post" onsubmit="return confirmDelete('{{ logger.sn }}')">
 							<button class="btn btn-danger btn-icon-split" role="button">
 								<span class="text">Delete</span>
@@ -47,7 +47,7 @@
 							</button>
 						</form> #}
 						<a href="{{ path_for('editLogger', {'id': logger.id}) }}" class="btn btn-warning btn-sm btn-icon-split" role="button">
-							<span class="icon text-white-50"><i class="fa fa-edit"></i></span>
+							<span class="icon"><i class="fa fa-edit"></i></span>
 							<span class="text">Edit</span>
 						</a>
 					</td>
@@ -63,7 +63,7 @@
 {% block js %}
 <script>
 	$(function () {
-		$('#btn-create').focus();
+		document.getElementById('btn-create').focus();
 	})
 
 	confirmDelete = function(sn) {
