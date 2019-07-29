@@ -20,17 +20,15 @@
 			</div>
 			<div class="text-right">
 				{% if user()['tenant_id'] <= 0 %}
-					<a href="{{ path_for('addUser') }}?t={{ tenant.id }}" class="btn btn-success btn-sm btn-icon-split" role="button">
-						<span class="icon text-white-50"><i class="fa fa-user-plus text-white-50"></i></span>
+					<a href="{{ path_for('addUser') }}?t={{ tenant.id }}" class="btn btn-success btn-sm" role="button">
 						<span class="text">{{ tenant.jml_user }} user</span>
 					</a>
 				{% endif %}
-				<a href="{{ path_for('addLogger') }}?t={{ tenant.id }}" class="btn btn-info btn-sm btn-icon-split" role="button">
-					<span class="icon text-white-50"><i class="fa fa-plus-circle text-white-50"></i></span>
+				<a href="{{ path_for('addLogger') }}?t={{ tenant.id }}" class="btn btn-info btn-sm" role="button">
 					<span class="text">{{ tenant.jml_logger }} logger</span>
 				</a>
-				<a href="{{ path_for('editTenant', {'id': tenant.id}) }}" class="btn btn-warning btn-sm" role="button"><i class="fa fa-edit"></i></a>
-				{# <button class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button> #}
+				<a href="{{ path_for('editTenant', {'id': tenant.id}) }}" class="btn btn-warning btn-sm" role="button">Edit</a>
+				{# <button class="btn btn-danger btn-sm">Delete</button> #}
 			</div>
 		</div>
 	</div>
@@ -42,7 +40,7 @@
 {% block js %}
 <script>
 	$(function () {
-		$('#btn-create').focus();
+		document.getElementById('btn-create').focus();
 	})
 </script>
 {% endblock %}

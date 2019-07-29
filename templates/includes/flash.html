@@ -1,6 +1,6 @@
 {% if flash('errors') %}
 <div class="alert alert-danger alert-dismissible fade show">
-    <h3 class="h5 font-weight-bold"><i class="fa fa-exclamation-triangle"></i> Error</h3>
+    <h3 class="h5 font-weight-bold">Error</h3>
     <ul class="mb-0">
         {% for err in flash('errors') %}
             <li>{{ err }}</li>
@@ -14,7 +14,7 @@
 
 {% if flash('messages') %}
 <div class="alert alert-info alert-dismissible fade show">
-    <h3 class="h5 font-weight-bold"><i class="fa fa-exclamation-triangle"></i> Info</h3>
+    <h3 class="h5 font-weight-bold">Info</h3>
     <ul class="mb-0">
         {% for msg in flash('messages') %}
             <li>{{ msg }}</li>

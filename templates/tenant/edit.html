@@ -12,7 +12,7 @@
             </a>
         </h2>
         <span class="mx-3">
-            <i class="fa fa-angle-right"></i>
+            &rang;
         </span>
         {% if tenant.id %}
             <h2 class="h3 mb-0">
@@ -21,14 +21,14 @@
                 </a>
             </h2>
             <span class="mx-3">
-                <i class="fa fa-angle-right"></i>
+                &rang;
             </span>
         {% endif %}
         <h2 class="h3 mb-0 text-gray-800">{{ mode }}</h2>
     </div>
 
     <div class="row">
-        <div class="col-12 col-lg-6">
+        <div class="col-12 col-lg-7">
             <div class="card">
                 <div class="card-body">
 
@@ -69,7 +69,7 @@
 {% block js %}
     <script>
         $(function () {
-            $('#nama').focus();
+            document.getElementById('nama').focus();
             $('#slug').bind('keyup blur', function () {
                 var node = $(this);
                 node.val(node.val().toLowerCase().replace(/[^a-z0-9-]/g, ''))
