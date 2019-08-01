@@ -39,7 +39,7 @@ class UsersController extends Controller
         ];
 
         $tenants = $this->db->query("SELECT * FROM tenant ORDER BY nama")->fetchAll();
-        $timezones = DateTimeZone::listIdentifiers(DateTimeZone::ALL);
+        $timezones = DateTimeZone::listIdentifiers(DateTimeZone::PER_COUNTRY, 'ID');
         $referer = $this->referer($request, $this->route('users'));
 
         return $this->view($response, 'user/edit.html', [
@@ -102,7 +102,7 @@ class UsersController extends Controller
     {
         $user = $request->getAttribute('user');
         $tenants = $this->db->query("SELECT * FROM tenant ORDER BY nama")->fetchAll();
-        $timezones = DateTimeZone::listIdentifiers(DateTimeZone::ALL);
+        $timezones = DateTimeZone::listIdentifiers(DateTimeZone::PER_COUNTRY, 'ID');
         $referer = $this->referer($request, $this->route('users'));
 
         return $this->view($response, 'user/edit.html', [

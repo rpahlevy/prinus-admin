@@ -5,8 +5,9 @@ use Slim\Http\Response;
 
 // Routes
 
-// $app->get('[/]', '\App\Controllers\TestController:test');
-$app->redirect('[/]', $_ENV['APP_URL'].'/login');
+$app->get('[/]', function ($req, $res, $next) { return "Hello"; })
+    ->add(\App\Middlewares\AuthMiddlewares\UserMiddleware::class);
+//$app->redirect('[/]', $_ENV['APP_URL'].'/login')
 $app->get('/login', '\App\Controllers\AuthControllers\LoginController:login')->setName('login');
 $app->post('/login', '\App\Controllers\AuthControllers\LoginController:handleLogin');
 $app->post('/logout', '\App\Controllers\AuthControllers\LoginController:logout')
@@ -34,7 +35,7 @@ $app->group('/tenant', function() {
         $this->get('/edit', '\App\Controllers\TenantController:edit')->setName('editTenant');
         $this->post('/edit', '\App\Controllers\TenantController:handleEdit');
     })->add(\App\Middlewares\TenantMiddleware::class);
-})->add(\App\Middlewares\AuthMiddlewares\UserMiddleware::class);
+})->add(\App\Middlewares\AuthMiddlewares\AdminMiddleware::class);
 
 $app->group('/user', function() {
 

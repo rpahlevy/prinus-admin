@@ -55,10 +55,10 @@ class TenantController extends Controller
     {
         $tenant = $request->getParams();
 
-        $stmt = $this->db->prepare("INSERT INTO tenant (nama, slug) VALUES (:nama, :slug)");
-        $stmt->bindValue(':nama', $tenant['nama']);
-        $stmt->bindValue(':slug', $tenant['slug']);
-        $stmt->execute();
+        $stmt = $this->db->prepare("INSERT INTO tenant (id, nama, slug) VALUES (nextval('tenant_id_seq'), :nama, :slug)");
+        //$stmt->bindValue(':nama', $tenant['nama']);
+        //$stmt->bindValue(':slug', $tenant['slug']);
+        $stmt->execute(["nama" => $tenant['nama'], "slug" => $tenant['slug']]);
         
         $referer = $request->getParam('_referer', $this->route('tenant'));
         
