@@ -35,7 +35,7 @@ $app->group('/tenant', function() {
         $this->get('/edit', '\App\Controllers\TenantController:edit')->setName('editTenant');
         $this->post('/edit', '\App\Controllers\TenantController:handleEdit');
     })->add(\App\Middlewares\TenantMiddleware::class);
-})->add(\App\Middlewares\AuthMiddlewares\AdminMiddleware::class);
+});//->add(\App\Middlewares\AuthMiddlewares\AdminMiddleware::class);
 
 $app->group('/user', function() {
 
