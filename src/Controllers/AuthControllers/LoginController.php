@@ -36,7 +36,11 @@ class LoginController extends Controller
         $this->session->user_id = $user['id'];
         $this->session->user_refresh_time = strtotime("+1hour");
 
-        return $this->redirect($response, $this->route('dashboard'));
+        if ($user['tenant_id'] == 0) {
+            return $this->redirect($response, $this->route('dashboard'));
+        } else {
+            return $this->redirect($response, $this->route('logger'));
+        }
     }
 
     public function logout($request, $response, $args)
