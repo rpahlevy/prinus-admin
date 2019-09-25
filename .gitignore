@@ -9,3 +9,4 @@
 .env
 *.zip
 composer.lock
+public/php_errors.log

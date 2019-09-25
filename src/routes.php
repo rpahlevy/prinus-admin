@@ -3,6 +3,8 @@
 use Slim\Http\Request;
 use Slim\Http\Response;
 
+date_default_timezone_set("Asia/Jakarta");
+
 // Routes
 
 $app->get('[/]', function ($req, $res, $next) { return "Hello"; })
@@ -35,7 +37,7 @@ $app->group('/tenant', function() {
         $this->get('/edit', '\App\Controllers\TenantController:edit')->setName('editTenant');
         $this->post('/edit', '\App\Controllers\TenantController:handleEdit');
     })->add(\App\Middlewares\TenantMiddleware::class);
-});//->add(\App\Middlewares\AuthMiddlewares\AdminMiddleware::class);
+})->add(\App\Middlewares\AuthMiddlewares\UserMiddleware::class);
 
 $app->group('/user', function() {
 

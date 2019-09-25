@@ -4,70 +4,177 @@
 
 {% block content %}
 
-<!-- Page Heading -->
-<div class="d-flex align-items-center justify-content-between mb-4">
-	<h1 class="h3 mb-0 text-gray-800">Logger</h1>
-	{% if user()['tenant_id'] > 0 %}
-		<a href="{{ path_for('addLogger') }}?t={{ user()['tenant_id'] }}" class="btn btn-primary" id="btn-create">Add new</a>
-	{% else %}
-		<a href="{{ path_for('addLogger') }}" class="btn btn-primary" id="btn-create">Add new</a>
-	{% endif %}
-</div>
+    <!-- Page Heading -->
+    <div
+        class="d-flex align-items-center mb-4">
+        {# <h1 class="h3 mb-0 text-gray-800">Logger</h1> #}
+        {% if user()['tenant_id'] > 0 %}
+            <a href="{{ path_for('addLogger') }}?t={{ user()['tenant_id'] }}" class="btn btn-primary ml-auto" id="btn-create">Add new logger</a>
+        {% else %}
+            <a href="{{ path_for('addLogger') }}" class="btn btn-primary ml-auto" id="btn-create">Add new logger</a>
+        {% endif %}
+    </div>
 
-<div class="card">
-	<div class="card-body p-0">
-		<table class="table table-hover table-bordered text-dark mb-0">
-			<thead>
-				<tr>
-					<th class="align-top text-center">#</th>
-					<th class="align-top text-center">Tenant</th>
-					<th class="align-top text-center">SN</th>
-					<th class="align-top text-center">Loc. ID</th>
-					<th class="align-top text-center">Aksi</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for logger in loggers %}
-				<tr>
-					<td class="text-right">{{ loop.index }}</td>
-					<td>
-						<h3 class="h6 mb-0 font-weight-bold"><a href="{{ path_for('detailTenant', {'id': logger.tenant_id}) }}" class="">{{ logger.nama_tenant }}</a></h3>
-					</td>
-					<td class="text-center">
-						<h3 class="h6 mb-0">{{ logger.sn }}</h3>
-					</td>
-					<td class="text-right">
-						<h3 class="h6 mb-0">{{ logger.location_id ?: '' }}</h3>
-					</td>
-					<td class="text-center w-auto">
-						{# <form class="d-inline" action="{{ path_for('deleteLogger', {id: logger.id}) }}" method="post" onsubmit="return confirmDelete('{{ logger.sn }}')">
-							<button class="btn btn-danger btn-icon-split" role="button">
-								<span class="text">Delete</span>
-								<span class="icon text-white-50"><i class="fa fa-trash text-white-50"></i></span>
-							</button>
-						</form> #}
-						<a href="{{ path_for('editLogger', {'id': logger.id}) }}" class="btn btn-warning btn-sm btn-icon-split" role="button">
-							<span class="icon"><i class="fa fa-edit"></i></span>
-							<span class="text">Edit</span>
-						</a>
-					</td>
-				</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-	</div>
-</div>
+    {# <div class="card">
+                            	<div class="card-body p-0">
+                            		<table class="table table-hover table-bordered text-dark mb-0">
+                            			<thead>
+                            				<tr>
+                            					<th class="align-top text-center">#</th>
+                            					<th class="align-top text-center">Tenant</th>
+                            					<th class="align-top text-center">SN</th>
+                            					<th class="align-top text-center">Loc. ID</th>
+                            					<th class="align-top text-center">Aksi</th>
+                            				</tr>
+                            			</thead>
+                            			<tbody>
+                            				{% for logger in loggers %}
+                            				<tr>
+                            					<td class="text-right">{{ loop.index }}</td>
+                            					<td>
+                            						<h3 class="h6 mb-0 font-weight-bold"><a href="{{ path_for('detailTenant', {'id': logger.tenant_id}) }}" class="">{{ logger.nama_tenant }}</a></h3>
+                            					</td>
+                            					<td class="text-center">
+                            						<h3 class="h6 mb-0">{{ logger.sn }}</h3>
+                            					</td>
+                            					<td class="text-right">
+                            						<h3 class="h6 mb-0">{{ logger.location_id ?: '' }}</h3>
+                            					</td>
+                            					<td class="text-center w-auto">
+                            						<form class="d-inline" action="{{ path_for('deleteLogger', {id: logger.id}) }}" method="post" onsubmit="return confirmDelete('{{ logger.sn }}')">
+                            							<button class="btn btn-danger btn-icon-split" role="button">
+                            								<span class="text">Delete</span>
+                            								<span class="icon text-white-50"><i class="fa fa-trash text-white-50"></i></span>
+                            							</button>
+                            						</form>
+                            						<a href="{{ path_for('editLogger', {'id': logger.id}) }}" class="btn btn-warning btn-sm btn-icon-split" role="button">
+                            							<span class="icon"><i class="fa fa-edit"></i></span>
+                            							<span class="text">Edit</span>
+                            						</a>
+                            					</td>
+                            				</tr>
+                            				{% endfor %}
+                            			</tbody>
+                            		</table>
+                            	</div>
+                            </div> #}
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            <div class="d-flex flex-column flex-sm-row align-items-center">
+                <div class="mb-3 mb-sm-0">
+                    <h1 class="h2 font-weight-normal mb-1">Status Logger</h1>
+                    <p class="text-muted mb-0">
+                        Data 24 jam terakhir dari
+                        {{ 'now'|date('d M Y, G:i') }}
+                    </p>
+                </div>
+                <span class="h3 ml-auto mb-0">
+                    {{ status_logger }}%
+                    {% if status_logger < 65 %}
+                        <span class="text-danger">&#11044;</span>
+                    {% elseif status_logger < 80 %}
+                        <span class="text-warning">&#11044;</span>
+                    {% else %}
+                        <span class="text-success">&#11044;</span>
+                    {% endif %}
+                </span>
+            </div>
+
+            <hr class="my-4">
+
+            <div class="row">
+                {% for logger in loggers %}
+                    <div class="col-12 col-sm-6">
+                        <div class="card border-0">
+                            <div class="card-body px-0">
+
+                                <div class="d-flex flex-column flex-sm-row align-items-start mb-2">
+                                    <div class="mb-3 mb-sm-0">
+                                        <h1 class="h5 mb-0">
+                                            {{ logger.sn }}
+                                        </h1>
+                                        <p class="small text-muted mb-0">
+                                            {{ logger.nama_tenant }}
+                                        </p>
+                                    </div>
+                                    <span class="h6 text-muted ml-auto mb-0">
+                                        {{ logger.raw_total }}%
+                                        {% if logger.raw_total < 65 %}
+                                            <span class="text-danger">&#11044;</span>
+                                        {% elseif logger.raw_total < 80 %}
+                                            <span class="text-warning">&#11044;</span>
+                                        {% else %}
+                                            <span class="text-success">&#11044;</span>
+                                        {% endif %}
+                                    </span>
+                                </div>
+
+                                <div>
+                                    <canvas style="height: 60px;" class="w-100 chartjs-render-monitor" data-data="{{ logger.raw|json_encode|raw }}"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
 
 {% block js %}
-<script>
-	$(function () {
-		document.getElementById('btn-create').focus();
-	})
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script>
+        $(function () {
+            document.getElementById('btn-create').focus();
+            $('.chartjs-render-monitor').each(function () {
+                var ctx = $(this)[0];
+                var ds = $(this).data('data');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: {{ labels|json_encode|raw }},
+                        datasets: [
+                            {
+                                data: ds,
+                                borderColor: "#00ff66",
+                                // fill: false,
+								backgroundColor: "#30D158",
+                                lineTension: 0
+                            }
+                        ]
+                    },
+                    options: {
+                        legend: {
+                            display: false
+                        },
+                        scales: {
+                            xAxes: [
+                                {
+                                    // ticks: {
+                                    //     display: false // this will remove only the label
+                                    // }
+									display: false // this will remove all the x-axis grid lines
+                                }
+                            ],
+                            yAxes: [
+                                {
+                                    ticks: {
+                                        // display: false // this will remove only the label
+										beginAtZero: true
+                                    },
+									display: false // this will remove all the x-axis grid lines
+                                }
+                            ],
+                        }
+                    }
+                })
+            });
+        })
 
-	confirmDelete = function(sn) {
-		return confirm("Hapus logger "+ sn +" permanen?");
-	}
-</script>
+        confirmDelete = function (sn) {
+            return confirm("Hapus logger " + sn + " permanen?");
+        }
+    </script>
 {% endblock %}

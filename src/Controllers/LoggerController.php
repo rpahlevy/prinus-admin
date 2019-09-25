@@ -41,8 +41,37 @@ class LoggerController extends Controller
                 ")->fetchAll();
         }
 
+        $status_logger = 0;
+        foreach ($loggers as &$logger) {
+            $logger['raw'] = [];
+            $raw_total = 0;
+            for ($i=0; $i<24; $i++) {
+                $raw = random_int(60, 100);
+                $logger['raw'][] = $raw;
+                $raw_total += $raw;
+            }
+
+            $logger['raw_total'] = floor($raw_total / 24);
+            $status_logger += $logger['raw_total'];
+        }
+        unset($logger);
+        $status_logger = floor($status_logger / count($loggers));
+
+        $past_hour = (date('G') + 24)%24 + 1;
+        $labels = [];
+        for ($i=0; $i<24; $i++) {
+            $labels[] = $past_hour;
+
+            $past_hour++;
+            if ($past_hour > 23) {
+                $past_hour = 0;
+            }
+        }
+
         return $this->view($response, 'logger/index.html', [
-            'loggers' => $loggers
+            'loggers' => $loggers,
+            'labels' => $labels,
+            'status_logger' => $status_logger,
         ]);
     }
 
