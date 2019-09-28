@@ -72,6 +72,7 @@ class LoggerController extends Controller
             'loggers' => $loggers,
             'labels' => $labels,
             'status_logger' => $status_logger,
+            'user_token' => $this->session->user_basic_auth,
         ]);
     }
 

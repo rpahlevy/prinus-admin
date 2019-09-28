@@ -127,6 +127,23 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
     <script>
         $(function () {
+            $.ajax({
+                url: 'https://prinus.net/api/sensor/{{ loggers[0].sn }}',
+                method: 'get',
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader("Authorization", "Basic {{ user_token }}");
+                }
+            })
+            .done(function(res) {
+                console.log(res);
+            })
+            .fail(function() {
+
+            })
+            .always(function() {
+
+            })
+
             document.getElementById('btn-create').focus();
             $('.chartjs-render-monitor').each(function () {
                 var ctx = $(this)[0];
@@ -138,10 +155,11 @@
                         datasets: [
                             {
                                 data: ds,
-                                borderColor: "#00ff66",
+                                // borderColor: "#00ff66",
                                 // fill: false,
 								backgroundColor: "#30D158",
-                                lineTension: 0
+                                // lineTension: 0,
+                                label: "Jam",
                             }
                         ]
                     },

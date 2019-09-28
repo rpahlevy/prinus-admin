@@ -35,6 +35,7 @@ class LoginController extends Controller
 
         $this->session->user_id = $user['id'];
         $this->session->user_refresh_time = strtotime("+1hour");
+        $this->session->user_basic_auth = base64_encode($credentials['username'] .":". $credentials['password']);
 
         if ($user['tenant_id'] == 0) {
             return $this->redirect($response, $this->route('dashboard'));
