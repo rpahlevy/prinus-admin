@@ -44,9 +44,19 @@ class LoggerController extends Controller
         $targets = [0 => $target_num];
         $raw = [0 => []];
         $total_data = 0;
+        $invalids = [];
         foreach ($result as $res) {
-            $day = date('Y-m-d H:i:s', strtotime($res->sampling));
-            if ($day >= $to) {
+            $sampling = strtotime($res->sampling);
+            $time_set_at = strtotime($res->time_set_at);
+
+            // check if valid sampling
+            if ($sampling - $time_set_at < 1 * 60) {
+                $invalids[] = $res;
+                continue;
+            }
+
+            $sampling = date('Y-m-d H:i:s', $sampling);
+            if ($sampling >= $to) {
                 do {
                     $cursor++;
                     $labels[] = $cursor;
@@ -56,7 +66,7 @@ class LoggerController extends Controller
 
                     $from = date('Y-m-d H:i:s', strtotime("$from +1hour"));
                     $to   = date('Y-m-d H:i:s', strtotime("$to +1hour"));
-                } while ($day > $to);
+                } while ($sampling > $to);
             }
 
             $data[$cursor]++;
@@ -67,9 +77,8 @@ class LoggerController extends Controller
 
             $total_data++;
 
-            // var_dump($day);
+            // var_dump($sampling);
             // die();
-            // $sampling[] = $day;
 
             if ($cursor > 23) { break; }
         }
@@ -91,6 +100,7 @@ class LoggerController extends Controller
             // 'targets' => $targets,
             'total_data' => $total_data,
             'raw' => $raw,
+            'invalids' => $invalids,
         ]);
     }
 }
