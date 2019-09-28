@@ -20,6 +20,8 @@ class UserMiddleware extends Controller
         }
         // before
 
+        $this->session->user_refresh_time = strtotime("+1hour");
+
         $response = $next($request, $response);
 
         // after

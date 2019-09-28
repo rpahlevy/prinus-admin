@@ -24,6 +24,8 @@ class AdminMiddleware extends Controller
             throw new \Slim\Exception\NotFoundException($request, $response);
         }
         // before
+        
+        $this->session->user_refresh_time = strtotime("+1hour");
 
         $response = $next($request, $response);
 

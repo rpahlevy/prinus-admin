@@ -69,6 +69,12 @@ $app->group('/logger', function() {
     $this->group('/{id}', function() {
 
         // $this->get('', '\App\Controllers\LoggerController:detail')->setName('detailLogger');
+        $this->get('', function(Request $request, Response $response) {
+            return $response->withJson([
+                'status' => 200,
+                'message' => "OK"
+            ]);
+        });
 
         $this->get('/edit', '\App\Controllers\LoggerController:edit')->setName('editLogger');
         $this->post('/edit', '\App\Controllers\LoggerController:handleEdit');
@@ -78,3 +84,16 @@ $app->group('/logger', function() {
         // $this->post('/delete', '\App\Controllers\LoggerController:handleDelete')->setName('deleteLogger');
     })->add(\App\Middlewares\LoggerMiddleware::class);
 })->add(\App\Middlewares\AuthMiddlewares\UserMiddleware::class);
+
+
+// API
+$app->group('/api', function() {
+
+    $this->group('/logger', function() {
+
+        $this->group('/{sn}', function() {
+
+            $this->get('/sensor', '\App\Controllers\ApiControllers\LoggerController:getSensor');
+        });
+    });
+});
