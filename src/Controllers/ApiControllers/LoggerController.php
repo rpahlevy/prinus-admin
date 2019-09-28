@@ -90,7 +90,7 @@ class LoggerController extends Controller
             'data' => $data,
             // 'targets' => $targets,
             'total_data' => $total_data,
-            // 'raw' => $raw,
+            'raw' => $raw,
         ]);
     }
 }
