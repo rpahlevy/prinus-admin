@@ -60,9 +60,9 @@ class LoggerController extends Controller
             }
 
             $data[$cursor]++;
-            if ($data[$cursor] > $target_num) {
-                $data[$cursor] = $target_num;
-            }
+            // if ($data[$cursor] > $target_num) {
+            //     $data[$cursor] = $target_num;
+            // }
             $raw[$cursor][] = $res;
 
             $total_data++;
